@@ -1,42 +1,49 @@
 import toast from "react-hot-toast";
-import { useState } from "react";
 
-const SearchBar = ({ onSearch }) => {
-  const [request, setRequest] = useState("");
-
-  const handleInputChange = (event) => {
-    setRequest(event.target.value);
-  };
+const SearchBar = ({ onSearch, setQuery }) => {
+  const notify = () =>
+    toast.error("Please, enter the keyword!", {
+      style: {
+        border: "1px solid #000000",
+        padding: "16px",
+        color: "#000000",
+      },
+      iconTheme: {
+        primary: "#000000",
+        secondary: "#f5f5f5",
+      },
+    });
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const form = event.target;
 
-    if (!request.trim()) {
-      toast.error("Please enter a search query");
+    const form = event.target;
+    const value = form.elements.searchBar.value;
+    setQuery(value);
+
+    if (value.trim() === "") {
+      notify();
       return;
-    } else {
-      onSearch(request);
-      form.reset();
     }
+    onSearch(value);
+    form.reset();
   };
 
   return (
     <header>
-      <form onSubmit={handleSubmit}>
-        <input
-          name="request"
-          value={request}
-          onChange={handleInputChange}
-          type="text"
-          //   autocomplete="off"
-          //   autofocus
-          placeholder="Search images and photos"
-        />
-        <button type="submit">Search</button>
-      </form>
+      <header>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+            name="searchBar"
+          />
+          <button type="submit">Search</button>
+        </form>
+      </header>
     </header>
   );
 };
-
 export default SearchBar;
