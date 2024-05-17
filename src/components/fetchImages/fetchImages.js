@@ -16,7 +16,7 @@ const fetchImages = async (value, page) => {
       },
     });
 
-    return response.data;
+    return response.data.results;
   } catch (error) {
     console.error("Error fetching images:", error);
     return [];

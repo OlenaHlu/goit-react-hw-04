@@ -5,6 +5,8 @@ import ErrorMessage from "../ErrorMessage/ErrorMessage";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import Loader from "../Loader/Loader";
 
+import { Toaster } from "react-hot-toast";
+
 import fetchImages from "../fetchImages/fetchImages";
 
 import { useState } from "react";
@@ -14,7 +16,7 @@ function App() {
   const [page, setPage] = useState(1); // поточна сторінка даних для завантаження наступної порції зображень
   const [images, setImages] = useState([]); // масив зображень, які будуть відображені в галереї
   const [isOpen, setIsOpen] = useState(false); // стан для відстеження відкриття/закриття модального вікна зображення
-  const [selectedImages, setSelectedImages] = useState(""); //URL вибраного зображення для відображення в модальному вікні
+  const [selectedImages, setSelectedImages] = useState({ alt: "", url: "" }); //URL та ALT вибраного зображення для відображення в модальному вікні
   const [loading, setLoading] = useState(false); // стан відстеження процесу завантаження даних
   const [error, setError] = useState(false); // стан відстеження помилки
 
@@ -35,14 +37,15 @@ function App() {
   };
 
   // відкриваю модальне вікно зображення та встановлюю вибране зображення для відображення
-  const openModal = (imageUrl) => {
-    setSelectedImages(imageUrl);
+  const openModal = (url, alt) => {
     setIsOpen(true);
+    setSelectedImages({ alt, url });
   };
 
   // закриваю модальне вікно зображення
   const closeModal = () => {
     setIsOpen(false);
+    setSelectedImages({ alt: "", url: "" });
   };
 
   //обробляю подію завантаження наступної порції зображень
@@ -50,8 +53,8 @@ function App() {
     try {
       setLoading(true);
       const nextPage = page + 1;
-      const data = await fetchImages(request, nextPage);
-      setImages([...images, ...data.results]);
+      const requestData = await fetchImages(request, nextPage);
+      setSelectedImages([...images, ...requestData.results]);
       setPage(nextPage);
     } catch (error) {
       setError(true);
@@ -63,17 +66,19 @@ function App() {
   return (
     <>
       <SearchBar onSearch={handleSearch} setQuery={setRequest} />
-      {images.length > 0 && <ImageGallery images={images} isOpen={openModal} />}
-      {error && <ErrorMessage request={request} setError={setError} />}
-      {loading && <Loader />}
-      <LoadMoreBtn onLoadMore={handleLoadMore} />
-
+      <Toaster />
+      {error ? (
+        <ErrorMessage />
+      ) : (
+        <ImageGallery images={images} openModal={openModal} />
+      )}
+      {loading && <Loader isVisible={loading} />}
       <ImageModal
-        images={images}
         isOpen={isOpen}
         isClose={closeModal}
-        imageUrl={selectedImages}
+        selectedImages={selectedImages}
       />
+      {images.length > 0 && <LoadMoreBtn onLoadMore={handleLoadMore} />}
     </>
   );
 }

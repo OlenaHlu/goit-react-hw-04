@@ -1,10 +1,10 @@
 import { RotatingLines } from "react-loader-spinner";
 
-const Loader = () => {
+const Loader = (isVisible) => {
   return (
     <div>
       <RotatingLines
-        visible={true}
+        visible={isVisible}
         height="96"
         width="96"
         color="grey"

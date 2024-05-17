@@ -14,16 +14,19 @@ const customStyles = {
   },
 };
 
-const ImageModal = ({ isOpen, isClose, imageUrl, imageAlt }) => {
+const ImageModal = ({ isOpen, isClose, selectedImages }) => {
   return (
     <ReactModal
       isOpen={isOpen}
-      isClose={isClose}
+      onRequestClose={isClose}
       style={customStyles}
       contentLabel="Image Modal"
+      shouldCloseOnOverlayClick={true}
+      shouldCloseOnEsc={true}
+      preventScroll={true}
     >
       <div>
-        <img src={imageUrl} alt={imageAlt} />
+        <img src={selectedImages.url} alt={selectedImages.alt} />
       </div>
     </ReactModal>
   );
