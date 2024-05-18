@@ -24,10 +24,9 @@ const ImageModal = ({ isOpen, isClose, selectedImages }) => {
       shouldCloseOnOverlayClick={true}
       shouldCloseOnEsc={true}
       preventScroll={true}
+      ariaHideApp={false}
     >
-      <div>
-        <img src={selectedImages.url} alt={selectedImages.alt} />
-      </div>
+      <img src={selectedImages.url} alt={selectedImages.alt} />
     </ReactModal>
   );
 };

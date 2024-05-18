@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 
-const SearchBar = ({ onSearch, setQuery }) => {
+const SearchBar = ({ onSearch, setRequest }) => {
   const notify = () => toast.error("Please, enter the keyword!");
 
   const handleSubmit = (event) => {
@@ -8,13 +8,13 @@ const SearchBar = ({ onSearch, setQuery }) => {
 
     const form = event.target;
     const value = form.elements.searchBar.value.trim();
-    setQuery(value);
+    setRequest(value);
 
     if (value === "") {
       notify();
       return;
     }
-    setQuery(value);
+    setRequest(value);
     onSearch(value);
     form.reset();
   };

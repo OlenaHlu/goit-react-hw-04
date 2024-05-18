@@ -22,13 +22,13 @@ function App() {
 
   const handleSearch = async (value) => {
     try {
-      setError(false);
-      setLoading(true);
       setImages([]);
       setPage(1);
-      setRequest(request);
+      setError(false);
+      setLoading(true);
+
       const requestData = await fetchImages(value, page);
-      selectedImages(requestData.results);
+      setImages(requestData.results);
     } catch (error) {
       setError(true);
     } finally {
@@ -36,25 +36,22 @@ function App() {
     }
   };
 
-  // відкриваю модальне вікно зображення та встановлюю вибране зображення для відображення
-  const openModal = (url, alt) => {
+  function openModal(alt, url) {
     setIsOpen(true);
     setSelectedImages({ alt, url });
-  };
+  }
 
-  // закриваю модальне вікно зображення
-  const closeModal = () => {
+  function closeModal() {
     setIsOpen(false);
     setSelectedImages({ alt: "", url: "" });
-  };
+  }
 
-  //обробляю подію завантаження наступної порції зображень
   const handleLoadMore = async () => {
     try {
       setLoading(true);
       const nextPage = page + 1;
       const requestData = await fetchImages(request, nextPage);
-      setSelectedImages([...images, ...requestData.results]);
+      setImages([...images, ...requestData.results]);
       setPage(nextPage);
     } catch (error) {
       setError(true);
@@ -65,7 +62,7 @@ function App() {
 
   return (
     <>
-      <SearchBar onSearch={handleSearch} setQuery={setRequest} />
+      <SearchBar onSearch={handleSearch} setRequest={setRequest} />
       <Toaster />
       {error ? (
         <ErrorMessage />

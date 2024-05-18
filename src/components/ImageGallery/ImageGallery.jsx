@@ -10,9 +10,10 @@ const ImageGallery = ({ images, openModal }) => {
               <ImageCard
                 urlSm={image.urls.small}
                 urlReg={image.urls.regular}
+                alt={image.description}
                 likes={image.likes}
                 username={image.user.name}
-                onClick={openModal}
+                openModal={openModal}
               />
             </li>
           );
