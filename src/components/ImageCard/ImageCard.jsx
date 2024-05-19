@@ -4,9 +4,10 @@ import { BiSolidLike } from "react-icons/bi";
 const ImageCard = ({ alt, urlSm, urlReg, likes, username, openModal }) => {
   return (
     <>
-      <div className={css.card} onClick={() => openModal(alt, urlReg)}>
+      <div className={css.card}>
         <img
           className={css.cardImage}
+          onClick={() => openModal(alt, urlReg)}
           width="400"
           height="300"
           src={urlSm}
